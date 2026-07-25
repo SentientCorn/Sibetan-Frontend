@@ -245,35 +245,35 @@ const DestinationsManager = ({ token, API_BASE, SERVER_ORIGIN, showMessage, onUn
         gridCols="md:grid-cols-2"
       >
         <div>
-          <label className="block font-bold mb-1">Nama Wisata*</label>
+          <label className="block font-bold mb-1">Nama Wisata <span className="text-rose-500">*</span></label>
           <input type="text" required value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} className="w-full border p-2 rounded" placeholder="Contoh: Agrowisata Salak Sibetan" />
         </div>
         <div>
-          <label className="block font-bold mb-1">Alamat*</label>
+          <label className="block font-bold mb-1">Alamat <span className="text-rose-500">*</span></label>
           <input type="text" required value={form.address} onChange={e => setForm({ ...form, address: e.target.value })} className="w-full border p-2 rounded" placeholder="Contoh: Banjar Telaga, Desa Sibetan, Bebandem, Karangasem" />
         </div>
         <div>
-          <label className="block font-bold mb-1">Jam Buka</label>
-          <input type="text" value={form.openHours} onChange={e => setForm({ ...form, openHours: e.target.value })} className="w-full border p-2 rounded" placeholder="Contoh: Setiap Hari, 08:00 - 17:00 WITA (Opsional)" />
+          <label className="block font-bold mb-1">Jam Buka <span className="text-xs font-normal text-slate-500">(Opsional)</span></label>
+          <input type="text" value={form.openHours} onChange={e => setForm({ ...form, openHours: e.target.value })} className="w-full border p-2 rounded" placeholder="Contoh: Setiap Hari, 08:00 - 17:00 WITA" />
         </div>
 
         <div>
-          <label className="block font-bold mb-1">Link Google Maps (URL / Embed)</label>
+          <label className="block font-bold mb-1">Link Google Maps <span className="text-xs font-normal text-slate-500">(Opsional)</span></label>
           <input
             type="text"
             value={form.mapsSource}
             onChange={e => setForm({ ...form, mapsSource: e.target.value })}
             className="w-full border p-2 rounded"
-            placeholder="Contoh: https://maps.app.goo.gl/... atau <iframe src='...'></iframe> (Opsional)"
+            placeholder="Contoh: https://maps.app.goo.gl/... atau <iframe src='...'></iframe>"
           />
         </div>
         <div className="md:col-span-2">
-          <label className="block font-bold mb-1">Deskripsi Lengkap*</label>
+          <label className="block font-bold mb-1">Deskripsi Lengkap <span className="text-rose-500">*</span></label>
           <textarea required rows={3} value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} className="w-full border p-2 rounded" placeholder="Contoh: Agrowisata Salak Sibetan menawarkan pengalaman memetik buah salak bali langsung dari pohonnya, serta menikmati keindahan kebun salak organik yang rindang..." />
         </div>
         <div className="md:col-span-2">
-          <label className="block font-bold mb-1">Tips Wisatawan</label>
-          <textarea rows={2} value={form.tips} onChange={e => setForm({ ...form, tips: e.target.value })} className="w-full border p-2 rounded" placeholder="Contoh: Gunakan pakaian dan alas kaki yang nyaman untuk trekking di kebun... (Opsional)" />
+          <label className="block font-bold mb-1">Tips Wisatawan <span className="text-xs font-normal text-slate-500">(Opsional)</span></label>
+          <textarea rows={2} value={form.tips} onChange={e => setForm({ ...form, tips: e.target.value })} className="w-full border p-2 rounded" placeholder="Contoh: Gunakan pakaian dan alas kaki yang nyaman untuk trekking di kebun..." />
         </div>
 
         {editId && existingImages.length > 0 && (
@@ -299,7 +299,7 @@ const DestinationsManager = ({ token, API_BASE, SERVER_ORIGIN, showMessage, onUn
         <div className="md:col-span-2 mt-2">
           <ImageUploader
             editMode={!!editId}
-            label={editId ? 'Tambah Foto Baru (Akan ditambahkan ke daftar gambar di atas):' : 'Upload Foto Destinasi (Multiple)*'}
+            label={editId ? 'Tambah Foto Baru (Akan ditambahkan ke daftar gambar di atas):' : 'Upload Foto Destinasi (Multiple) *'}
             onFilesSelected={(newFiles) => setSelectedFiles(prev => [...prev, ...newFiles])}
           />
           {selectedFiles.length > 0 && (

@@ -39,13 +39,20 @@ export const useHeroes = (options = {}) => {
 
       const sortedData = data.sort((a, b) => (a.order || 0) - (b.order || 0));
 
-      const formattedData = sortedData.map(hero => ({
-        ...hero,
-        imageUrl: hero.imageUrl ? formatImagePath(hero.imageUrl) : null,
-        originalImages: hero.images ? hero.images.map(img => typeof img === 'object' ? { ...img, imageUrl: formatImagePath(img.imageUrl) } : img) : [],
-        images: hero.images ? hero.images.map(img => formatImagePath(img.imageUrl || img)) : [],
-        image: hero.images && hero.images.length > 0 ? formatImagePath(hero.images[0].imageUrl || hero.images[0]) : formatImagePath(null)
-      }));
+      const formattedData = sortedData.map(hero => {
+        const mainImageUrl = hero.imageUrl ? formatImagePath(hero.imageUrl) : null;
+        const imagesList = hero.images && hero.images.length > 0
+          ? hero.images.map(img => formatImagePath(typeof img === 'object' ? (img.imageUrl || img) : img))
+          : (mainImageUrl ? [mainImageUrl] : []);
+
+        return {
+          ...hero,
+          imageUrl: mainImageUrl,
+          originalImages: hero.images ? hero.images.map(img => typeof img === 'object' ? { ...img, imageUrl: formatImagePath(img.imageUrl) } : img) : [],
+          images: imagesList,
+          image: mainImageUrl || (imagesList.length > 0 ? imagesList[0] : null)
+        };
+      });
 
       heroesCache = formattedData;
       setHeroes(formattedData);

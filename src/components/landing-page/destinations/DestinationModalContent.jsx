@@ -59,7 +59,7 @@ const DestinationModalContent = ({ destination }) => {
           </div>
         </div>
 
-        <p className="font-jakarta text-content-main leading-relaxed mb-8">
+        <p className="font-jakarta text-content-main leading-relaxed mb-8 text-justify">
           {destination.fullDescription || destination.description}
         </p>
 

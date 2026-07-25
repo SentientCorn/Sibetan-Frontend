@@ -1,6 +1,12 @@
 import React from 'react';
 import ImageWithSkeleton from '../../ui/ImageWithSkeleton';
 
+const truncateText = (text, maxLength = 110) => {
+  if (!text) return '';
+  if (text.length <= maxLength) return text;
+  return text.slice(0, maxLength).trim() + '...';
+};
+
 const DestinationCard = ({ destination, onClickDetail }) => {
   return (
     <div 
@@ -37,8 +43,8 @@ const DestinationCard = ({ destination, onClickDetail }) => {
         </h3>
 
         {/* Description - Plus Jakarta Sans */}
-        <p className="font-jakarta text-content-main text-sm leading-relaxed mb-6 flex-grow">
-          {destination.description}
+        <p className="font-jakarta text-content-main text-sm leading-relaxed mb-6 flex-grow line-clamp-3 text-justify">
+          {truncateText(destination.description, 110)}
         </p>
 
         {/* Divider */}

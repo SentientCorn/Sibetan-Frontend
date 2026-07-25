@@ -88,7 +88,7 @@ const PackageModalContent = ({ pkg }) => {
           </div>
         </div>
 
-        <p className="font-jakarta text-content-main leading-relaxed mb-8">
+        <p className="font-jakarta text-content-main leading-relaxed mb-8 text-justify">
           {pkg.fullDescription || pkg.description}
         </p>
 

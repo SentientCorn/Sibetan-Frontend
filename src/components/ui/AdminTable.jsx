@@ -5,7 +5,8 @@ const AdminTable = ({
   data,
   columns,
   emptyMessage = 'Belum ada data di database backend.',
-  editId
+  editId,
+  getRowProps
 }) => {
   return (
     <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
@@ -33,18 +34,22 @@ const AdminTable = ({
                   </td>
                 </tr>
               ) : (
-                data.map((item, idx) => (
-                  <tr 
-                    key={item.id || idx} 
-                    className={`hover:bg-slate-50 ${editId === item.id ? 'bg-amber-50/60' : ''}`}
-                  >
-                    {columns.map((col, colIdx) => (
-                      <td key={colIdx} className={`p-3.5 ${col.className || ''}`}>
-                        {col.render ? col.render(item) : item[col.key]}
-                      </td>
-                    ))}
-                  </tr>
-                ))
+                data.map((item, idx) => {
+                  const customProps = getRowProps ? getRowProps(item, idx) : {};
+                  return (
+                    <tr 
+                      key={item.id || idx}
+                      {...customProps}
+                      className={`hover:bg-slate-50 transition-colors ${editId === item.id ? 'bg-amber-50/60' : ''} ${customProps.className || ''}`}
+                    >
+                      {columns.map((col, colIdx) => (
+                        <td key={colIdx} className={`p-3.5 ${col.className || ''}`}>
+                          {col.render ? col.render(item, idx) : item[col.key]}
+                        </td>
+                      ))}
+                    </tr>
+                  );
+                })
               )}
             </tbody>
           </table>
