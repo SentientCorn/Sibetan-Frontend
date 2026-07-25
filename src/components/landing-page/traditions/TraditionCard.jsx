@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import ImageWithSkeleton from '../../ui/ImageWithSkeleton';
 
+const truncateText = (text, maxLength = 110) => {
+  if (!text) return '';
+  if (text.length <= maxLength) return text;
+  return text.slice(0, maxLength).trim() + '...';
+};
+
 const TraditionCard = ({ tradition }) => {
   const [currentImageIdx, setCurrentImageIdx] = useState(0);
 
@@ -75,8 +81,8 @@ const TraditionCard = ({ tradition }) => {
         </h3>
 
         {/* Description */}
-        <div className={`font-jakarta text-content-main text-sm leading-relaxed mb-4 transition-all duration-500 ${isExpanded ? '' : 'line-clamp-3'}`}>
-          {tradition.description}
+        <div className={`font-jakarta text-content-main text-sm leading-relaxed mb-4 transition-all duration-500 text-justify ${isExpanded ? '' : 'line-clamp-3'}`}>
+          {isExpanded ? tradition.description : truncateText(tradition.description, 110)}
         </div>
 
         {/* Read More Link */}

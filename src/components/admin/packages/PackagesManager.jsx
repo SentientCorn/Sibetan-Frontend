@@ -247,11 +247,11 @@ const PackagesManager = ({ token, API_BASE, SERVER_ORIGIN, showMessage, onUnauth
         gridCols="md:grid-cols-3"
       >
         <div>
-          <label className="block font-bold mb-1">Nama Paket*</label>
+          <label className="block font-bold mb-1">Nama Paket <span className="text-rose-500">*</span></label>
           <input type="text" required value={form.title} onChange={e => setForm({...form, title: e.target.value})} className="w-full border p-2 rounded" placeholder="Contoh: Paket Trekking Salak & Homestay" />
         </div>
         <div>
-          <label className="block font-bold mb-1">Kategori*</label>
+          <label className="block font-bold mb-1">Kategori <span className="text-rose-500">*</span></label>
           <select required value={form.type} onChange={e => setForm({...form, type: e.target.value})} className="w-full border p-2 rounded bg-white">
             <option value="WISATA">Wisata Saja</option>
             <option value="AKOMODASI">Akomodasi Saja</option>
@@ -259,19 +259,19 @@ const PackagesManager = ({ token, API_BASE, SERVER_ORIGIN, showMessage, onUnauth
           </select>
         </div>
         <div>
-          <label className="block font-bold mb-1">Harga (Angka saja)*</label>
+          <label className="block font-bold mb-1">Harga (Angka saja) <span className="text-rose-500">*</span></label>
           <input type="number" required value={form.price} onChange={e => setForm({...form, price: e.target.value})} className="w-full border p-2 rounded" placeholder="Contoh: 250000" />
         </div>
         <div>
-          <label className="block font-bold mb-1">Durasi*</label>
+          <label className="block font-bold mb-1">Durasi <span className="text-rose-500">*</span></label>
           <input type="text" required value={form.duration} onChange={e => setForm({...form, duration: e.target.value})} className="w-full border p-2 rounded" placeholder="Contoh: 1 Hari (09.00 - 16.00) atau 2D1N" />
         </div>
         <div className="md:col-span-3">
-          <label className="block font-bold mb-1">Deskripsi*</label>
+          <label className="block font-bold mb-1">Deskripsi <span className="text-rose-500">*</span></label>
           <textarea required rows={2} value={form.description} onChange={e => setForm({...form, description: e.target.value})} className="w-full border p-2 rounded" placeholder="Contoh: Paket wisata edukasi petik salak lengkap dengan pemandu lokal, makan siang tradisional khas Sibetan, serta fasilitas penginapan yang asri..." />
         </div>
         <div className="md:col-span-2">
-          <label className="block font-bold mb-1">Fasilitas*</label>
+          <label className="block font-bold mb-1">Fasilitas <span className="text-rose-500">*</span></label>
           <TagInput 
             value={form.facilities} 
             onChange={(val) => setForm({...form, facilities: val})} 
@@ -279,19 +279,19 @@ const PackagesManager = ({ token, API_BASE, SERVER_ORIGIN, showMessage, onUnauth
           />
         </div>
         <div>
-          <label className="block font-bold mb-1">Kapasitas</label>
+          <label className="block font-bold mb-1">Kapasitas <span className="text-xs font-normal text-slate-500">(Opsional)</span></label>
           <input type="text" value={form.capacity} onChange={e => setForm({...form, capacity: e.target.value})} className="w-full border p-2 rounded" placeholder="Contoh: Min 2 - Maks 10 Orang" />
         </div>
         <div>
-          <label className="block font-bold mb-1">Nama Kontak</label>
+          <label className="block font-bold mb-1">Nama Kontak <span className="text-xs font-normal text-slate-500">(Opsional)</span></label>
           <input type="text" value={form.contactName} onChange={e => setForm({...form, contactName: e.target.value})} className="w-full border p-2 rounded" placeholder="Contoh: Pak Suwena (Pengelola Pokdarwis)" />
         </div>
         <div>
-          <label className="block font-bold mb-1">No. WhatsApp Kontak</label>
+          <label className="block font-bold mb-1">No. WhatsApp Kontak <span className="text-xs font-normal text-slate-500">(Opsional)</span></label>
           <input type="text" value={form.contactPhone} onChange={e => setForm({...form, contactPhone: e.target.value})} className="w-full border p-2 rounded" placeholder="Contoh: 081234567890" />
         </div>
         <div>
-          <label className="block font-bold mb-1">Catatan Kontak</label>
+          <label className="block font-bold mb-1">Catatan Kontak <span className="text-xs font-normal text-slate-500">(Opsional)</span></label>
           <input type="text" value={form.contactNote} onChange={e => setForm({...form, contactNote: e.target.value})} className="w-full border p-2 rounded" placeholder="Contoh: Harap reservasikan H-2 sebelum kedatangan" />
         </div>
 

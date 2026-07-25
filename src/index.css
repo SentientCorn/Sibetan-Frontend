@@ -75,3 +75,12 @@ a {
     transition-duration: 0.01ms !important;
   }
 }
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-0.6deg) translateY(-1px); }
+  50% { transform: rotate(0.6deg) translateY(1px); }
+}
+
+.animate-wiggle {
+  animation: wiggle 0.22s infinite ease-in-out;
+}

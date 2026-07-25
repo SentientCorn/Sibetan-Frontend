@@ -79,7 +79,7 @@ const ContactManager = ({ token, API_BASE, showMessage, onUnauthorized }) => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block font-bold text-sm text-slate-700 mb-1.5">Judul Kontak*</label>
+            <label className="block font-bold text-sm text-slate-700 mb-1.5">Judul Kontak <span className="text-rose-500">*</span></label>
             <input 
               type="text" 
               required 
@@ -90,7 +90,7 @@ const ContactManager = ({ token, API_BASE, showMessage, onUnauthorized }) => {
             />
           </div>
           <div>
-            <label className="block font-bold text-sm text-slate-700 mb-1.5">Telepon / WhatsApp*</label>
+            <label className="block font-bold text-sm text-slate-700 mb-1.5">Telepon / WhatsApp <span className="text-rose-500">*</span></label>
             <input 
               type="text" 
               required 
@@ -102,7 +102,7 @@ const ContactManager = ({ token, API_BASE, showMessage, onUnauthorized }) => {
           </div>
 
           <div className="md:col-span-2">
-            <label className="block font-bold text-sm text-slate-700 mb-1.5">Deskripsi Singkat*</label>
+            <label className="block font-bold text-sm text-slate-700 mb-1.5">Deskripsi Singkat <span className="text-rose-500">*</span></label>
             <textarea 
               required 
               rows={2}
@@ -114,7 +114,7 @@ const ContactManager = ({ token, API_BASE, showMessage, onUnauthorized }) => {
           </div>
 
           <div className="md:col-span-2">
-            <label className="block font-bold text-sm text-slate-700 mb-1.5">Alamat Lengkap*</label>
+            <label className="block font-bold text-sm text-slate-700 mb-1.5">Alamat Lengkap <span className="text-rose-500">*</span></label>
             <textarea 
               required 
               rows={2}
@@ -126,7 +126,7 @@ const ContactManager = ({ token, API_BASE, showMessage, onUnauthorized }) => {
           </div>
           
           <div className="md:col-span-2">
-            <label className="block font-bold text-sm text-slate-700 mb-1.5">Website (URL)*</label>
+            <label className="block font-bold text-sm text-slate-700 mb-1.5">Website (URL) <span className="text-rose-500">*</span></label>
             <input 
               type="text" 
               required 

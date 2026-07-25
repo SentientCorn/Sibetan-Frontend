@@ -1,6 +1,12 @@
 import React from 'react';
 import ImageWithSkeleton from '../../ui/ImageWithSkeleton';
 
+const truncateText = (text, maxLength = 110) => {
+  if (!text) return '';
+  if (text.length <= maxLength) return text;
+  return text.slice(0, maxLength).trim() + '...';
+};
+
 const PackageCard = ({ pkg, onClickDetail }) => {
   const getTypeLabel = (type) => {
     if (type === 'AKOMODASI') return 'Akomodasi';
@@ -56,8 +62,8 @@ const PackageCard = ({ pkg, onClickDetail }) => {
         </div>
 
         {/* Description */}
-        <p className="font-jakarta text-content-main text-sm leading-relaxed mb-6 flex-grow">
-          {pkg.description}
+        <p className="font-jakarta text-content-main text-sm leading-relaxed mb-6 flex-grow line-clamp-3 text-justify">
+          {truncateText(pkg.description, 110)}
         </p>
 
         {/* Divider */}

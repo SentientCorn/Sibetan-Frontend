@@ -235,11 +235,11 @@ const CulturesManager = ({ token, API_BASE, SERVER_ORIGIN, showMessage, onUnauth
         gridCols="md:grid-cols-2"
       >
         <div>
-          <label className="block font-bold mb-1">Nama Kesenian/Adat*</label>
+          <label className="block font-bold mb-1">Nama Kesenian/Adat <span className="text-rose-500">*</span></label>
           <input type="text" required value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} className="w-full border p-2 rounded" placeholder="Contoh: Tradisi Ngusaba Subak & Tari Rejang" />
         </div>
         <div>
-          <label className="block font-bold mb-1">Kategori / Tag*</label>
+          <label className="block font-bold mb-1">Kategori / Tag <span className="text-rose-500">*</span></label>
           <TagInput
             value={form.tag}
             onChange={(val) => setForm({ ...form, tag: val })}
@@ -247,7 +247,7 @@ const CulturesManager = ({ token, API_BASE, SERVER_ORIGIN, showMessage, onUnauth
           />
         </div>
         <div className="md:col-span-2">
-          <label className="block font-bold mb-1">Deskripsi*</label>
+          <label className="block font-bold mb-1">Deskripsi <span className="text-rose-500">*</span></label>
           <textarea required rows={3} value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} className="w-full border p-2 rounded" placeholder="Contoh: Upacara adat dan tradisi kebudayaan Hindu yang dilaksanakan oleh warga Desa Sibetan secara berkala sebagai wujud rasa syukur atas kelestarian alam dan kebun salak..." />
         </div>
 

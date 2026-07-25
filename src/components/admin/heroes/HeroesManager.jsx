@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Trash2, Edit, Image as ImageIcon, Eye } from 'lucide-react';
+import { Plus, Trash2, Edit, Image as ImageIcon, Eye, GripVertical, ArrowUp, ArrowDown } from 'lucide-react';
 import Modal from '../../ui/Modal';
 import ImageUploader from '../../ui/ImageUploader';
 import AdminActionBar from '../../ui/AdminActionBar';
@@ -9,6 +9,7 @@ import { useHeroes } from '../../../hooks/useHeroes';
 
 const HeroesManager = ({ token, API_BASE, SERVER_ORIGIN, showMessage, onUnauthorized }) => {
   const { heroes, loading, refetch: fetchData } = useHeroes({ onUnauthorized });
+  const [items, setItems] = useState([]);
   const [actionLoading, setActionLoading] = useState(false);
   const [showAddForm, setShowAddForm] = useState(false);
   const [editId, setEditId] = useState(null);
@@ -16,11 +17,22 @@ const HeroesManager = ({ token, API_BASE, SERVER_ORIGIN, showMessage, onUnauthor
   const [existingImageUrl, setExistingImageUrl] = useState(null);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [form, setForm] = useState({
-    title: '', subtitle: '', order: '0'
+    title: '', subtitle: ''
   });
 
+  // Drag and drop states
+  const [draggedIndex, setDraggedIndex] = useState(null);
+  const [dragOverIndex, setDragOverIndex] = useState(null);
+
+  // Sync internal items state when heroes data from hook updates
+  useEffect(() => {
+    if (heroes) {
+      setItems(heroes);
+    }
+  }, [heroes]);
+
   const resetForm = () => {
-    setForm({ title: '', subtitle: '', order: '0' });
+    setForm({ title: '', subtitle: '' });
     setExistingImageUrl(null);
     setSelectedFiles([]);
     setEditId(null);
@@ -30,21 +42,13 @@ const HeroesManager = ({ token, API_BASE, SERVER_ORIGIN, showMessage, onUnauthor
   const handleEditClick = (item) => {
     setForm({
       title: item.title || '',
-      subtitle: item.subtitle || '',
-      order: item.order !== undefined && item.order !== null ? String(item.order) : '0'
+      subtitle: item.subtitle || ''
     });
     setExistingImageUrl(item.imageUrl || null);
     setSelectedFiles([]);
     setEditId(item.id);
     setShowAddForm(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const handleFileChange = (e) => {
-    if (e.target.files && e.target.files.length > 0) {
-      const newFiles = Array.from(e.target.files);
-      setSelectedFiles(prev => [...prev, ...newFiles]);
-    }
   };
 
   const handleRemoveSelectedFile = (index) => {
@@ -131,47 +135,186 @@ const HeroesManager = ({ token, API_BASE, SERVER_ORIGIN, showMessage, onUnauthor
     }
   };
 
+  // Persist updated list order to backend API
+  const saveNewOrder = async (newItems) => {
+    setItems(newItems);
+    if (!token) return;
+
+    try {
+      const payloadItems = newItems.map((item, idx) => ({
+        id: item.id,
+        order: idx
+      }));
+
+      const res = await fetch(`${API_BASE}/heroes/reorder`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        credentials: 'include',
+        body: JSON.stringify({ items: payloadItems })
+      });
+
+      if (res.status === 401) {
+        onUnauthorized();
+        return;
+      }
+
+      if (res.ok) {
+        showMessage('success', 'Urutan gambar hero berhasil diperbarui');
+        fetchData();
+      } else {
+        const data = await res.json();
+        showMessage('error', data.error || 'Gagal memperbarui urutan gambar');
+      }
+    } catch (err) {
+      showMessage('error', 'Terjadi kesalahan jaringan saat memperbarui urutan');
+    }
+  };
+
+  // Move item up or down
+  const handleMoveIndex = (index, direction) => {
+    const targetIndex = index + direction;
+    if (targetIndex < 0 || targetIndex >= items.length) return;
+
+    const newItems = [...items];
+    const temp = newItems[index];
+    newItems[index] = newItems[targetIndex];
+    newItems[targetIndex] = temp;
+
+    saveNewOrder(newItems);
+  };
+
+  // Drag and drop handlers
+  const handleDragStart = (e, index) => {
+    e.dataTransfer.setData('text/plain', index);
+    setDraggedIndex(index);
+  };
+
+  const handleDragOver = (e, index) => {
+    e.preventDefault();
+    if (dragOverIndex !== index) {
+      setDragOverIndex(index);
+    }
+  };
+
+  const handleDrop = (e, dropIndex) => {
+    e.preventDefault();
+    if (draggedIndex === null || draggedIndex === dropIndex) {
+      setDraggedIndex(null);
+      setDragOverIndex(null);
+      return;
+    }
+
+    const newItems = [...items];
+    const draggedItem = newItems[draggedIndex];
+    newItems.splice(draggedIndex, 1);
+    newItems.splice(dropIndex, 0, draggedItem);
+
+    setDraggedIndex(null);
+    setDragOverIndex(null);
+
+    saveNewOrder(newItems);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedIndex(null);
+    setDragOverIndex(null);
+  };
+
   const columns = [
-    { header: 'ID', key: 'id', className: 'font-mono font-bold text-slate-700' },
-    { header: 'Preview', key: 'preview', render: (h) => (
-      h.imageUrl ? (
-        <img src={h.imageUrl} alt={h.title || 'hero'} className="w-16 h-10 object-cover rounded shadow-xs" />
-      ) : (
-        <span className="text-slate-400">No Image</span>
+    {
+      header: 'Urutan & Reorder',
+      key: 'reorder',
+      className: 'w-48',
+      render: (h, idx) => (
+        <div className="flex items-center gap-2">
+          {/* Drag Handle Icon */}
+          <div
+            className="p-1 text-slate-400 hover:text-slate-700 cursor-grab active:cursor-grabbing hover:bg-slate-200 rounded transition-colors"
+            title="Tarik & Lepas untuk mengubah urutan"
+          >
+            <GripVertical className="w-4 h-4" />
+          </div>
+
+          {/* Move Up / Move Down Buttons */}
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              disabled={idx === 0}
+              onClick={() => handleMoveIndex(idx, -1)}
+              className="p-1 text-slate-600 hover:bg-slate-200 rounded disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-colors"
+              title="Geser ke Atas"
+            >
+              <ArrowUp className="w-3.5 h-3.5" />
+            </button>
+            <button
+              type="button"
+              disabled={idx === items.length - 1}
+              onClick={() => handleMoveIndex(idx, 1)}
+              className="p-1 text-slate-600 hover:bg-slate-200 rounded disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-colors"
+              title="Geser ke Bawah"
+            >
+              <ArrowDown className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
+          {/* Badge position */}
+          <span className="font-bold text-xs bg-brand/10 text-brand px-2 py-0.5 rounded-full font-mono">
+            Slide #{idx + 1}
+          </span>
+        </div>
       )
-    )},
+    },
+    {
+      header: 'Preview',
+      key: 'preview',
+      render: (h) => (
+        h.imageUrl ? (
+          <img src={h.imageUrl} alt={h.title || 'hero'} className="w-16 h-10 object-cover rounded shadow-xs" />
+        ) : (
+          <span className="text-slate-400">No Image</span>
+        )
+      )
+    },
     { header: 'Judul', key: 'title', className: 'font-bold text-slate-900', render: (h) => h.title || '-' },
     { header: 'Sub Judul', key: 'subtitle', className: 'text-slate-600', render: (h) => h.subtitle || '-' },
-    { header: 'Urutan', key: 'order', className: 'font-bold' },
-    { header: 'Aksi', key: 'action', headerClassName: 'text-right', className: 'text-right space-x-2', render: (h) => (
-      <>
-        <button
-          type="button"
-          onClick={() => setPreviewItem(h)}
-          className="bg-blue-50 hover:bg-blue-100 text-blue-700 px-2.5 py-1 rounded font-bold inline-flex items-center gap-1 transition-colors cursor-pointer"
-        >
-          <Eye className="w-3.5 h-3.5" />
-          Preview
-        </button>
-        <button
-          type="button"
-          onClick={() => handleEditClick(h)}
-          className="bg-amber-50 hover:bg-amber-100 text-amber-700 px-2.5 py-1 rounded font-bold inline-flex items-center gap-1 transition-colors cursor-pointer"
-        >
-          <Edit className="w-3.5 h-3.5" />
-          Edit
-        </button>
-        <button
-          type="button"
-          disabled={actionLoading}
-          onClick={() => handleDelete(h.id)}
-          className="bg-rose-50 hover:bg-rose-100 text-rose-600 px-2.5 py-1 rounded font-bold inline-flex items-center gap-1 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-        >
-          <Trash2 className="w-3.5 h-3.5" />
-          Hapus
-        </button>
-      </>
-    )}
+    {
+      header: 'Aksi',
+      key: 'action',
+      headerClassName: 'text-right',
+      className: 'text-right space-x-2',
+      render: (h) => (
+        <>
+          <button
+            type="button"
+            onClick={() => setPreviewItem(h)}
+            className="bg-blue-50 hover:bg-blue-100 text-blue-700 px-2.5 py-1 rounded font-bold inline-flex items-center gap-1 transition-colors cursor-pointer"
+          >
+            <Eye className="w-3.5 h-3.5" />
+            Preview
+          </button>
+          <button
+            type="button"
+            onClick={() => handleEditClick(h)}
+            className="bg-amber-50 hover:bg-amber-100 text-amber-700 px-2.5 py-1 rounded font-bold inline-flex items-center gap-1 transition-colors cursor-pointer"
+          >
+            <Edit className="w-3.5 h-3.5" />
+            Edit
+          </button>
+          <button
+            type="button"
+            disabled={actionLoading}
+            onClick={() => handleDelete(h.id)}
+            className="bg-rose-50 hover:bg-rose-100 text-rose-600 px-2.5 py-1 rounded font-bold inline-flex items-center gap-1 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+          >
+            <Trash2 className="w-3.5 h-3.5" />
+            Hapus
+          </button>
+        </>
+      )
+    }
   ];
 
   return (
@@ -184,7 +327,7 @@ const HeroesManager = ({ token, API_BASE, SERVER_ORIGIN, showMessage, onUnauthor
             resetForm();
           } else {
             setEditId(null);
-            setForm({ title: '', subtitle: '', order: '0' });
+            setForm({ title: '', subtitle: '' });
             setExistingImageUrl(null);
             setSelectedFiles([]);
             setShowAddForm(true);
@@ -201,23 +344,19 @@ const HeroesManager = ({ token, API_BASE, SERVER_ORIGIN, showMessage, onUnauthor
         onCancel={resetForm}
         submitTextAdd="Simpan Hero Banner"
         submitTextEdit="Simpan Perubahan"
-        gridCols="md:grid-cols-3"
+        gridCols="md:grid-cols-2"
       >
         <div>
-          <label className="block font-bold mb-1">Judul Banner</label>
+          <label className="block font-bold mb-1">Judul Banner <span className="text-xs font-normal text-slate-500">(Opsional)</span></label>
           <input type="text" value={form.title} onChange={e => setForm({...form, title: e.target.value})} className="w-full border p-2 rounded" placeholder="Contoh: Selamat Datang Di Desa Sibetan" />
         </div>
         <div>
-          <label className="block font-bold mb-1">Sub Judul Banner</label>
+          <label className="block font-bold mb-1">Sub Judul Banner <span className="text-xs font-normal text-slate-500">(Opsional)</span></label>
           <input type="text" value={form.subtitle} onChange={e => setForm({...form, subtitle: e.target.value})} className="w-full border p-2 rounded" placeholder="Contoh: Karangasem, Bali" />
-        </div>
-        <div>
-          <label className="block font-bold mb-1">Urutan Tampil (Angka)</label>
-          <input type="number" value={form.order} onChange={e => setForm({...form, order: e.target.value})} className="w-full border p-2 rounded" placeholder="Contoh: 0" />
         </div>
 
         {editId && existingImageUrl && (
-          <div className="md:col-span-3 bg-slate-50 p-3 rounded-xl border border-slate-200 mt-2">
+          <div className="md:col-span-2 bg-slate-50 p-3 rounded-xl border border-slate-200 mt-2">
             <label className="block font-bold text-slate-700 mb-2 flex items-center gap-1.5">
               <ImageIcon className="w-4 h-4 text-amber-600" />
               <span>Gambar Saat Ini di Database (Akan diganti jika Anda memilih foto baru di bawah):</span>
@@ -228,10 +367,10 @@ const HeroesManager = ({ token, API_BASE, SERVER_ORIGIN, showMessage, onUnauthor
           </div>
         )}
 
-        <div className="md:col-span-3 mt-2">
+        <div className="md:col-span-2 mt-2">
           <ImageUploader 
             editMode={!!editId}
-            label={editId ? 'Upload Foto Baru (Opsional, untuk mengganti gambar hero di atas)*' : 'Upload Foto Hero Banner*'}
+            label={editId ? 'Upload Foto Baru (Opsional, untuk mengganti gambar hero di atas):' : 'Upload Foto Hero Banner *'}
             onFilesSelected={(newFiles) => setSelectedFiles(prev => [...prev, ...newFiles])}
           />
           {selectedFiles.length > 0 && (
@@ -259,12 +398,36 @@ const HeroesManager = ({ token, API_BASE, SERVER_ORIGIN, showMessage, onUnauthor
         </div>
       </AdminFormCard>
 
+      {/* Info Header Banner */}
+      <div className="bg-amber-50/60 border border-amber-200 rounded-xl p-3.5 mb-4 text-xs text-amber-900 flex items-center gap-2">
+        <GripVertical className="w-4 h-4 text-amber-600 shrink-0" />
+        <span>
+          <strong>Petunjuk Pengaturan Urutan:</strong> Tarik & lepas (*drag and drop*) ikon pegangan di sebelah kiri baris atau gunakan tombol panah <strong>⬆ / ⬇</strong> untuk mengubah urutan slide Hero Banner secara langsung.
+        </span>
+      </div>
+
       <AdminTable 
         loading={loading}
-        data={heroes}
+        data={items}
         columns={columns}
         emptyMessage="Belum ada data hero banner di database backend."
         editId={editId}
+        getRowProps={(item, idx) => ({
+          draggable: true,
+          onDragStart: (e) => handleDragStart(e, idx),
+          onDragOver: (e) => handleDragOver(e, idx),
+          onDrop: (e) => handleDrop(e, idx),
+          onDragEnd: handleDragEnd,
+          className: `transition-all duration-200 ${
+            draggedIndex === idx 
+              ? 'animate-wiggle bg-blue-100/70 border-2 border-blue-400 opacity-70 shadow-md' 
+              : dragOverIndex === idx 
+              ? 'border-t-2 border-blue-500 bg-blue-50/60' 
+              : draggedIndex !== null 
+              ? 'animate-wiggle' 
+              : ''
+          }`
+        })}
       />
 
       {/* Detail Modal Preview */}
