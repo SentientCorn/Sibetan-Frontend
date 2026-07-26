@@ -7,7 +7,7 @@ const Contact = () => {
 
   if (loading) {
     return (
-      <section id="contact" className="py-20 px-6 md:px-12 lg:px-12 xl:px-20 bg-surface flex justify-center items-center">
+      <section id="contact" className="py-20 px-6 md:px-12 lg:px-12 xl:px-20 bg-surface-card flex justify-center items-center">
         <div className="w-8 h-8 border-4 border-brand/30 border-t-brand rounded-full animate-spin"></div>
       </section>
     );
@@ -20,7 +20,7 @@ const Contact = () => {
   ];
 
   return (
-    <section id="contact" className="py-20 px-6 md:px-12 lg:px-12 xl:px-20 bg-surface">
+    <section id="contact" className="py-20 px-6 md:px-12 lg:px-12 xl:px-20 bg-surface-card">
       <div className="max-w-5xl mx-auto">
         
         {/* Header Section (without pillText) */}
