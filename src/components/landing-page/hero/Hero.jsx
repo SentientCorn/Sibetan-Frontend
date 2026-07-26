@@ -25,8 +25,9 @@ const Hero = () => {
 
   const activeHero = heroes && heroes.length > 0 ? heroes[currentIndex] : null;
   const heroBg = activeHero?.imageUrl || (activeHero?.images && activeHero.images.length > 0 ? activeHero.images[0] : null) || heroBgFallback;
-  const title = activeHero?.title || "Desa Sibetan";
-  const subtitle = activeHero?.subtitle || "Karangasem, Bali";
+  const title = "Desa Sibetan";
+  const subtitle = "Karangasem, Bali";
+  const description = activeHero?.description || "Desa penghasil salak terbaik di Bali, kaya akan tradisi Hindu, alam yang asri, dan keramahan warga yang tulus.";
 
   const handlePrev = () => {
     if (!heroes || heroes.length === 0) return;
@@ -69,7 +70,7 @@ const Hero = () => {
 
         {/* Description - Plus Jakarta Sans */}
         <p className="font-jakarta text-base md:text-lg text-gray-300 leading-relaxed mb-8 max-w-2xl">
-          Desa penghasil salak terbaik di Bali, kaya akan tradisi Hindu, alam yang asri, dan keramahan warga yang tulus.
+          {description}
         </p>
 
         {/* Buttons - Plus Jakarta Sans */}

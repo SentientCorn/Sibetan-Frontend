@@ -17,7 +17,7 @@ const HeroesManager = ({ token, API_BASE, SERVER_ORIGIN, showMessage, onUnauthor
   const [existingImageUrl, setExistingImageUrl] = useState(null);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [form, setForm] = useState({
-    title: '', subtitle: ''
+    title: '', description: ''
   });
 
   // Drag and drop states
@@ -32,7 +32,7 @@ const HeroesManager = ({ token, API_BASE, SERVER_ORIGIN, showMessage, onUnauthor
   }, [heroes]);
 
   const resetForm = () => {
-    setForm({ title: '', subtitle: '' });
+    setForm({ title: '', description: '' });
     setExistingImageUrl(null);
     setSelectedFiles([]);
     setEditId(null);
@@ -42,7 +42,7 @@ const HeroesManager = ({ token, API_BASE, SERVER_ORIGIN, showMessage, onUnauthor
   const handleEditClick = (item) => {
     setForm({
       title: item.title || '',
-      subtitle: item.subtitle || ''
+      description: item.description || ''
     });
     setExistingImageUrl(item.imageUrl || null);
     setSelectedFiles([]);
@@ -279,7 +279,7 @@ const HeroesManager = ({ token, API_BASE, SERVER_ORIGIN, showMessage, onUnauthor
       )
     },
     { header: 'Judul', key: 'title', className: 'font-bold text-slate-900', render: (h) => h.title || '-' },
-    { header: 'Sub Judul', key: 'subtitle', className: 'text-slate-600', render: (h) => h.subtitle || '-' },
+    { header: 'Deskripsi', key: 'description', className: 'text-slate-600', render: (h) => h.description ? (h.description.length > 50 ? h.description.substring(0, 50) + '...' : h.description) : '-' },
     {
       header: 'Aksi',
       key: 'action',
@@ -327,7 +327,7 @@ const HeroesManager = ({ token, API_BASE, SERVER_ORIGIN, showMessage, onUnauthor
             resetForm();
           } else {
             setEditId(null);
-            setForm({ title: '', subtitle: '' });
+            setForm({ title: '', description: '' });
             setExistingImageUrl(null);
             setSelectedFiles([]);
             setShowAddForm(true);
@@ -351,8 +351,8 @@ const HeroesManager = ({ token, API_BASE, SERVER_ORIGIN, showMessage, onUnauthor
           <input type="text" value={form.title} onChange={e => setForm({...form, title: e.target.value})} className="w-full border p-2 rounded" placeholder="Contoh: Selamat Datang Di Desa Sibetan" />
         </div>
         <div>
-          <label className="block font-bold mb-1">Sub Judul Banner <span className="text-xs font-normal text-slate-500">(Opsional)</span></label>
-          <input type="text" value={form.subtitle} onChange={e => setForm({...form, subtitle: e.target.value})} className="w-full border p-2 rounded" placeholder="Contoh: Karangasem, Bali" />
+          <label className="block font-bold mb-1">Deskripsi Banner <span className="text-xs font-normal text-slate-500">(Opsional)</span></label>
+          <textarea value={form.description} onChange={e => setForm({...form, description: e.target.value})} className="w-full border p-2 rounded" placeholder="Contoh: Desa penghasil salak terbaik di Bali, kaya akan tradisi Hindu, alam yang asri, dan keramahan warga yang tulus." rows="3"></textarea>
         </div>
 
         {editId && existingImageUrl && (
@@ -449,10 +449,10 @@ const HeroesManager = ({ token, API_BASE, SERVER_ORIGIN, showMessage, onUnauthor
                 {previewItem.title || 'Desa Sibetan'}
               </h1>
               <h2 className="font-poppins text-xl sm:text-2xl font-semibold text-white/90 mb-4">
-                {previewItem.subtitle || 'Karangasem, Bali'}
+                Karangasem, Bali
               </h2>
               <p className="font-jakarta text-sm sm:text-base text-gray-300 leading-relaxed mb-6 max-w-xl">
-                Desa penghasil salak terbaik di Bali, kaya akan tradisi Hindu, alam yang asri, dan keramahan warga yang tulus.
+                {previewItem.description || 'Desa penghasil salak terbaik di Bali, kaya akan tradisi Hindu, alam yang asri, dan keramahan warga yang tulus.'}
               </p>
               <div className="flex gap-3">
                 <span className="bg-white text-[#1B3461] font-bold px-6 py-2.5 rounded-lg text-xs shadow-md">
