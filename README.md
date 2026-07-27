@@ -16,7 +16,7 @@ A modern, single-page website acting as the official digital representation to p
 ## Built With
 
 * **Frontend:** Vite + ReactJS + TailwindCSS
-* **Backend/Admin:** Directus CMS
+* **Backend/Admin:** Express
 * **Database:** PostgreSQL
 
 ---
