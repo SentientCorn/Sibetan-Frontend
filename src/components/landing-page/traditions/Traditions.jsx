@@ -27,6 +27,8 @@ const Traditions = () => {
           <div className="text-center py-12 text-slate-500 font-medium">Memuat budaya & kesenian...</div>
         ) : error ? (
           <div className="text-center py-12 text-rose-500 font-medium">Gagal memuat data: {error}</div>
+        ) : traditionsData.length === 0 ? (
+          <div className="text-center py-12 text-slate-500 font-medium bg-white rounded-2xl border border-slate-100">Coming soon</div>
         ) : (
           <>
             {/* Cards Grid */}

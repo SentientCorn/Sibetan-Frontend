@@ -54,7 +54,7 @@ const Packages = () => {
         ) : error ? (
           <div className="text-center py-12 text-rose-500 font-medium">Gagal memuat paket wisata: {error}</div>
         ) : filteredPackages.length === 0 ? (
-          <div className="text-center py-12 text-slate-500 font-medium bg-white rounded-2xl border border-slate-100">Tidak ada paket untuk kategori ini.</div>
+          <div className="text-center py-12 text-slate-500 font-medium bg-white rounded-2xl border border-slate-100">Coming soon</div>
         ) : (
           /* Cards Grid */
           <div className={`grid gap-6 xl:gap-8 ${filteredPackages.length === 1

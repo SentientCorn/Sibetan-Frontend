@@ -29,6 +29,8 @@ const Destinations = () => {
           <div className="text-center py-12 text-slate-500 font-medium">Memuat destinasi...</div>
         ) : error ? (
           <div className="text-center py-12 text-rose-500 font-medium">Gagal memuat destinasi: {error}</div>
+        ) : destinationsData.length === 0 ? (
+          <div className="text-center py-12 text-slate-500 font-medium bg-white rounded-2xl border border-slate-100">Coming soon</div>
         ) : (
           <>
             {/* Cards Grid */}
