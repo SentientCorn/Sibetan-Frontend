@@ -17,11 +17,12 @@ const DestinationsManager = ({ token, API_BASE, SERVER_ORIGIN, showMessage, onUn
   const [existingImages, setExistingImages] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [form, setForm] = useState({
-    title: '', address: '', mapsSource: '', openHours: '', description: '', tips: ''
+    title: '', address: '', mapsSource: '', openHours: '', description: '', tips: '',
+    contactName: '', contactPhone: '', contactNote: ''
   });
 
   const resetForm = () => {
-    setForm({ title: '', address: '', mapsSource: '', openHours: '', description: '', tips: '' });
+    setForm({ title: '', address: '', mapsSource: '', openHours: '', description: '', tips: '', contactName: '', contactPhone: '', contactNote: '' });
     setExistingImages([]);
     setSelectedFiles([]);
     setEditId(null);
@@ -35,7 +36,10 @@ const DestinationsManager = ({ token, API_BASE, SERVER_ORIGIN, showMessage, onUn
       mapsSource: item.mapsSource || '',
       openHours: item.openHours || '',
       description: item.description || '',
-      tips: item.tips || ''
+      tips: item.tips || '',
+      contactName: item.contact?.name || '',
+      contactPhone: item.contact?.phone || '',
+      contactNote: item.contact?.note || ''
     });
     setExistingImages(item.originalImages || []);
     setSelectedFiles([]);
@@ -225,7 +229,7 @@ const DestinationsManager = ({ token, API_BASE, SERVER_ORIGIN, showMessage, onUn
             resetForm();
           } else {
             setEditId(null);
-            setForm({ title: '', address: '', mapsSource: '', openHours: '', description: '', tips: '', latitude: '', longitude: '' });
+            setForm({ title: '', address: '', mapsSource: '', openHours: '', description: '', tips: '', latitude: '', longitude: '', contactName: '', contactPhone: '', contactNote: '' });
             setExistingImages([]);
             setSelectedFiles([]);
             setShowAddForm(true);
@@ -274,6 +278,22 @@ const DestinationsManager = ({ token, API_BASE, SERVER_ORIGIN, showMessage, onUn
         <div className="md:col-span-2">
           <label className="block font-bold mb-1">Tips Wisatawan <span className="text-xs font-normal text-slate-500">(Opsional)</span></label>
           <textarea rows={2} value={form.tips} onChange={e => setForm({ ...form, tips: e.target.value })} className="w-full border p-2 rounded" placeholder="Contoh: Gunakan pakaian dan alas kaki yang nyaman untuk trekking di kebun..." />
+        </div>
+        
+        <div className="md:col-span-2 border-t mt-2 pt-4">
+          <h3 className="font-bold text-lg mb-3 text-slate-800">Kontak Pengelola Destinasi</h3>
+        </div>
+        <div>
+          <label className="block font-bold mb-1">Nama Kontak <span className="text-xs font-normal text-slate-500">(Opsional)</span></label>
+          <input type="text" value={form.contactName} onChange={e => setForm({ ...form, contactName: e.target.value })} className="w-full border p-2 rounded" placeholder="Contoh: Pak Wayan" />
+        </div>
+        <div>
+          <label className="block font-bold mb-1">Nomor WhatsApp/Telepon <span className="text-xs font-normal text-slate-500">(Opsional)</span></label>
+          <input type="text" value={form.contactPhone} onChange={e => setForm({ ...form, contactPhone: e.target.value })} className="w-full border p-2 rounded" placeholder="Contoh: 6281234567890" />
+        </div>
+        <div className="md:col-span-2">
+          <label className="block font-bold mb-1">Catatan Kontak <span className="text-xs font-normal text-slate-500">(Opsional)</span></label>
+          <textarea rows={2} value={form.contactNote} onChange={e => setForm({ ...form, contactNote: e.target.value })} className="w-full border p-2 rounded" placeholder="Contoh: Hubungi untuk reservasi grup atau paket wisata khusus..." />
         </div>
 
         {editId && existingImages.length > 0 && (
@@ -350,7 +370,8 @@ const DestinationsManager = ({ token, API_BASE, SERVER_ORIGIN, showMessage, onUn
               mapEmbedUrl: getGoogleMapsEmbedUrl(previewItem),
               mapLink: getGoogleMapsLink(previewItem),
               latitude: previewItem.latitude || null,
-              longitude: previewItem.longitude || null
+              longitude: previewItem.longitude || null,
+              contact: previewItem.contact || null
             }}
           />
         )}
