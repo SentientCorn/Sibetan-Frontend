@@ -9,7 +9,8 @@ const fallbackContactData = {
   phone: "+62 812-3456-7890",
   website: "sibetan.desa.id",
   mapEmbedUrl: "https://maps.google.com/maps?q=Desa%20Sibetan%2C%20Bebandem%2C%20Karangasem%2C%20Bali(Kantor%20Desa%20Sibetan)&hl=id&z=15&output=embed",
-  mapLink: "https://www.google.com/maps/search/?api=1&query=Desa+Sibetan+Karangasem+Bali"
+  mapLink: "https://www.google.com/maps/search/?api=1&query=Desa+Sibetan+Karangasem+Bali",
+  copyright: "\u00a9 2026 Desa Sibetan. Dikembangkan oleh UGM."
 };
 
 const sanitizeMapEmbedUrl = (rawUrl) => {

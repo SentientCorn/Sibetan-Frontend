@@ -60,9 +60,7 @@ const Footer = () => {
 
         {/* Copyright */}
         <div className="border-t border-white/10 pt-6 text-center">
-          <p className="font-jakarta text-white/60 text-xs sm:text-sm">
-            &copy; 2026 Desa Sibetan. Dikembangkan oleh UGM.
-          </p>
+          <p className="font-jakarta text-white/60 text-xs sm:text-sm" dangerouslySetInnerHTML={{ __html: contact?.copyright || '&copy; 2026 Desa Sibetan. Dikembangkan oleh UGM.' }} />
         </div>
       </div>
     </footer>

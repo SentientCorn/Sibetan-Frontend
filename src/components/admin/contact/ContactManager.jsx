@@ -7,7 +7,7 @@ const ContactManager = ({ token, API_BASE, showMessage, onUnauthorized }) => {
   const { contact, loading, refetch: fetchData } = useContact();
   const [actionLoading, setActionLoading] = useState(false);
   const [form, setForm] = useState({
-    title: '', description: '', address: '', phone: '', website: '', mapEmbedUrl: '', mapLink: ''
+    title: '', description: '', address: '', phone: '', website: '', mapEmbedUrl: '', mapLink: '', copyright: ''
   });
 
   // Load existing data into form
@@ -20,7 +20,8 @@ const ContactManager = ({ token, API_BASE, showMessage, onUnauthorized }) => {
         phone: contact.phone || '',
         website: contact.website || '',
         mapEmbedUrl: contact.mapEmbedUrl || '',
-        mapLink: contact.mapLink || ''
+        mapLink: contact.mapLink || '',
+        copyright: contact.copyright || ''
       });
     }
   }, [contact]);
@@ -135,6 +136,19 @@ const ContactManager = ({ token, API_BASE, showMessage, onUnauthorized }) => {
               className="w-full border border-slate-300 px-3 py-2 rounded-lg focus:outline-none focus:border-[#1B3461]" 
               placeholder="Contoh: sibetan.desa.id"
             />
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="block font-bold text-sm text-slate-700 mb-1.5">Copyright Footer <span className="text-rose-500">*</span></label>
+            <input 
+              type="text" 
+              required 
+              value={form.copyright} 
+              onChange={e => setForm({...form, copyright: e.target.value})} 
+              className="w-full border border-slate-300 px-3 py-2 rounded-lg focus:outline-none focus:border-[#1B3461]" 
+              placeholder="Contoh: &copy; 2026 Desa Sibetan. Dikembangkan oleh UGM."
+            />
+            <p className="text-xs text-slate-500 mt-1">Gunakan &amp;copy; untuk menampilkan simbol ©.</p>
           </div>
 
           <div className="md:col-span-2 mt-4 pt-4 border-t border-slate-100">
