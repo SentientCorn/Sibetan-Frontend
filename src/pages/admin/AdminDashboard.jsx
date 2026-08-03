@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MapPin, Sparkles, Package, Image as ImageIcon, AlertCircle, CheckCircle2, Phone } from 'lucide-react';
+import { MapPin, Sparkles, Package, Image as ImageIcon, AlertCircle, CheckCircle2, Phone, BookOpen } from 'lucide-react';
 import { API_BASE, SERVER_ORIGIN } from '../../services/api';
 import AdminLogin from '../../components/admin/auth/AdminLogin';
 import AdminHeader from '../../components/admin/layout/AdminHeader';
@@ -9,6 +9,7 @@ import CulturesManager from '../../components/admin/cultures/CulturesManager';
 import PackagesManager from '../../components/admin/packages/PackagesManager';
 import HeroesManager from '../../components/admin/heroes/HeroesManager';
 import ContactManager from '../../components/admin/contact/ContactManager';
+import KknWorksManager from '../../components/admin/kkn/KknWorksManager';
 import Toast from '../../components/ui/Toast';
 
 const AdminDashboard = () => {
@@ -52,6 +53,7 @@ const AdminDashboard = () => {
     { id: 'cultures', label: 'Kesenian & Adat', icon: Sparkles },
     { id: 'packages', label: 'Paket Wisata & Akomodasi', icon: Package },
     { id: 'heroes', label: 'Gambar Laman Utama', icon: ImageIcon },
+    { id: 'kkn-works', label: 'Karya KKN UGM (Peta & Modul)', icon: BookOpen },
     { id: 'contact', label: 'Pengaturan Kontak', icon: Phone },
   ];
 
@@ -134,11 +136,23 @@ const AdminDashboard = () => {
           />
         </div>
 
+        <div className={activeTab === 'kkn-works' ? 'block' : 'hidden'}>
+          <KknWorksManager 
+            key={`kkn-works-${refreshKey}`}
+            token={token}
+            API_BASE={API_BASE}
+            SERVER_ORIGIN={SERVER_ORIGIN}
+            showMessage={showMessage}
+            onUnauthorized={handleUnauthorized}
+          />
+        </div>
+
         <div className={activeTab === 'contact' ? 'block' : 'hidden'}>
           <ContactManager 
             key={`contact-${refreshKey}`}
             token={token}
             API_BASE={API_BASE}
+            SERVER_ORIGIN={SERVER_ORIGIN}
             showMessage={showMessage}
             onUnauthorized={handleUnauthorized}
           />
@@ -149,3 +163,4 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
+
