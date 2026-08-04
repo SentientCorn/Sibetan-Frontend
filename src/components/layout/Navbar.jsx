@@ -87,7 +87,7 @@ const Navbar = () => {
           
           {/* Logo */}
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full border border-white/20 bg-white/10 flex items-center justify-center shrink-0 overflow-hidden">
+            <div className="w-10 h-10 flex items-center justify-center shrink-0 overflow-hidden">
               <img src="/favicon.png" alt="Desa Sibetan" className="w-full h-full object-cover" />
             </div>
             <div>
