@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import heroBgFallback from '../../../assets/hero-coba.png';
 import { useHeroes } from '../../../hooks/useHeroes';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -24,9 +23,9 @@ const Hero = () => {
   }, [heroes]);
 
   const activeHero = heroes && heroes.length > 0 ? heroes[currentIndex] : null;
-  const heroBg = activeHero?.imageUrl || (activeHero?.images && activeHero.images.length > 0 ? activeHero.images[0] : null) || heroBgFallback;
-  const title = "Desa Sibetan";
-  const subtitle = "Karangasem, Bali";
+  const heroBg = activeHero?.imageUrl || (activeHero?.images && activeHero.images.length > 0 ? activeHero.images[0] : null) || null;
+  const title = activeHero?.title || "Desa Sibetan";
+  const subtitle = activeHero?.subtitle || "Karangasem, Bali";
   const description = activeHero?.description || "Desa penghasil salak terbaik di Bali, kaya akan tradisi Hindu, alam yang asri, dan keramahan warga yang tulus.";
 
   const handlePrev = () => {
@@ -42,12 +41,14 @@ const Hero = () => {
   return (
     <section className="relative w-full h-screen flex items-center px-6 md:px-12 lg:px-24 overflow-hidden bg-slate-900">
       {/* Background Image with Transition */}
-      <img
-        key={heroBg}
-        src={heroBg}
-        alt={title}
-        className="absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-700 ease-in-out"
-      />
+      {heroBg && (
+        <img
+          key={heroBg}
+          src={heroBg}
+          alt={title}
+          className="absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-700 ease-in-out"
+        />
+      )}
 
       {/* Gradient overlay for text readability */}
       <div className="absolute inset-0 bg-gradient-to-r from-brand via-brand/70 to-transparent z-0"></div>
