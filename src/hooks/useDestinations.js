@@ -107,6 +107,10 @@ export const useDestinations = (options = {}) => {
         const images = dest.images ? dest.images.map(img => formatImagePath(img.imageUrl || img)) : [];
         const image = images.length > 0 ? images[0] : formatImagePath(null);
 
+        const contactPerson = dest.contact?.name || dest.contactName || dest.contactPerson || '';
+        const contactPhone = dest.contact?.phone || dest.contactPhone || dest.whatsapp || dest.phone || '';
+        const contactNote = dest.contact?.note || dest.contactNote || '';
+
         return {
           ...dest,
           location: dest.address || dest.location || 'Desa Sibetan, Karangasem',
@@ -118,7 +122,12 @@ export const useDestinations = (options = {}) => {
           originalImages: dest.images ? dest.images.map(img => typeof img === 'object' ? { ...img, imageUrl: formatImagePath(img.imageUrl) } : img) : [],
           images: images.length > 0 ? images : [image],
           image: image,
-          photoCount: images.length
+          photoCount: images.length,
+          contactPerson: contactPerson,
+          contactName: contactPerson,
+          whatsapp: contactPhone,
+          contactPhone: contactPhone,
+          contactNote: contactNote
         };
       });
 

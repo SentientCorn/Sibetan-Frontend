@@ -371,7 +371,10 @@ const DestinationsManager = ({ token, API_BASE, SERVER_ORIGIN, showMessage, onUn
               mapLink: getGoogleMapsLink(previewItem),
               latitude: previewItem.latitude || null,
               longitude: previewItem.longitude || null,
-              contact: previewItem.contact || null
+              contact: previewItem.contact || null,
+              contactPerson: previewItem.contact?.name || previewItem.contactName || '',
+              whatsapp: previewItem.contact?.phone || previewItem.contactPhone || '',
+              contactNote: previewItem.contact?.note || previewItem.contactNote || ''
             }}
           />
         )}
